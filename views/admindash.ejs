@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <style>
+  body {
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #f0f0f0;
+  }
+
+  .main-content {
+    margin-left: 250px;
+    padding: 30px;
+  }
+
+  .dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  }
+
+  .chart-container {
+    background: #1b1f32;
+    color: #fff;
+    border-radius: 20px;
+    padding: 25px 30px;
+    margin-bottom: 40px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .chart-container h5 {
+    color: #f1f1f1;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  canvas {
+    background: transparent;
+  }
+
+  .card .fas {
+    font-size: 2rem;
+    opacity: 0.9;
+  }
+
+  .card.bg-primary {
+    background: linear-gradient(to right, #4e54c8, #8f94fb);
+  }
+
+  .card.bg-success {
+    background: linear-gradient(to right, #56ab2f, #a8e063);
+  }
+
+  .card.bg-warning {
+    background: linear-gradient(to right, #f7971e, #ffd200);
+  }
+
+  .card.bg-danger {
+    background: linear-gradient(to right, #cb2d3e, #ef473a);
+  }
+
+  h6 {
+    font-weight: 500;
+  }
+</style>
+
+</head>
+<body>
+  <%- include("navbar") %>
+  <%- include("sidebar") %>
+
+  <main class="main-content">
+    <div class="dashboard-title">Admin Dashboard</div>
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card text-white bg-primary p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6>Total Orders</h6>
+              <h3><%= totalOrders %></h3>
+            </div>
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-success p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6>Total Users</h6>
+              <h3><%= totalUsers %></h3>
+            </div>
+            <i class="fas fa-users"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-warning p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6>Total Products</h6>
+              <h3><%= totalProducts %></h3>
+            </div>
+            <i class="fas fa-box"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-danger p-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h6>Total Revenue</h6>
+              <h3><%= totalRevenue %></h3>
+            </div>
+            <i class="fas fa-chart-line"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h5 class="mb-3">Monthly Revenue Trend</h5>
+      <canvas id="lineRevenueChart" height="100"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <h5 class="mb-3">Top 5 Selling Products</h5>
+      <canvas id="topProductChart" height="100"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <h5 class="mb-3">Order Status Distribution</h5>
+      <canvas id="statusChart" height="100"></canvas>
+    </div>
+  </main>
+
+  <script id="chart-data" type="application/json">
+  {
+    "monthlyRevenue": <%- JSON.stringify(monthlyRevenue) %>,
+    "topProducts": <%- JSON.stringify(topProducts) %>,
+    "statusCounts": <%- JSON.stringify(statusCounts) %>
+  }
+  </script>
+
+  <script>
+  const chartData = JSON.parse(document.getElementById('chart-data').textContent);
+
+  // Monthly Revenue
+  const monthlyLabels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const monthlyRevenueData = Array(12).fill(0);
+  chartData.monthlyRevenue.forEach(item => {
+    monthlyRevenueData[item._id - 1] = item.revenue;
+  });
+
+  // Top Products
+const topProductLabels = (chartData.topProducts || []).map(p => p._id);
+const topProductData = (chartData.topProducts || []).map(p => p.totalUnitsSold || 0);
+
+  if (topProductLabels.length === 0) {
+  topProductLabels.push("No Data");
+  topProductData.push(0);
+}
+
+  // Order Status
+  const statusLabels = chartData.statusCounts.map(s => s._id);
+  const statusData = chartData.statusCounts.map(s => s.count);
+
+  // Line Chart: Monthly Revenue
+  new Chart(document.getElementById('lineRevenueChart'), {
+    type: 'line',
+    data: {
+      labels: monthlyLabels,
+      datasets: [{
+        label: 'Revenue (₹)',
+        data: monthlyRevenueData,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: '#4bc0c0',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      plugins: { legend: { labels: { color: 'white' } } },
+      scales: {
+        x: { ticks: { color: 'white' }, grid: { color: '#333' } },
+        y: { ticks: { color: 'white' }, grid: { color: '#333' } }
+      }
+    }
+  });
+
+  // Bar Chart: Top 5 Products
+  new Chart(document.getElementById('topProductChart'), {
+  type: 'bar',
+  data: {
+    labels: topProductLabels,
+    datasets: [{
+      label: 'Units Sold',
+      data: topProductData,
+      backgroundColor: topProductData.map((_, i) => ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'][i % 5]),
+      borderColor: topProductData.map((_, i) => ['#ff4d6d', '#339af0', '#ffc107', '#38b2ac', '#845ef7'][i % 5]),
+      borderWidth: 1,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: 'white' }, grid: { color: '#333' } },
+      y: { ticks: { color: 'white' }, grid: { color: '#333' }, beginAtZero: true }
+    }
+  }
+});
+
+  // Line Chart: Order Status Distribution
+  new Chart(document.getElementById('statusChart'), {
+    type: 'line',
+    data: {
+      labels: statusLabels,
+      datasets: [{
+        label: 'Order Status Count',
+        data: statusData,
+        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+     borderColor: '#4bc0c0',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { position: 'bottom', labels: { color: 'white' } }
+      },
+      scales: {
+        x: { ticks: { color: 'white' }, grid: { color: '#333' } },
+        y: { ticks: { color: 'white' }, grid: { color: '#333' }, beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Details</title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ccc;
+        text-align: left;
+      }
+      th {
+        background-color: #35ac75;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>All Orders</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Pincode</th>
+          <th>Product Name</th>
+          <th>status</th>
+          <th>Total Amount</th>
+          <th>Total Items</th>
+          <th>Date</th>
+          
+          <th>action</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach(order => { %>
+        <tr>
+          <td><%= order.username %></td>
+          <td><%= order.address %></td>
+          <td><%= order.city %></td>
+          <td><%= order.state %></td>
+          <td><%= order.pincode %></td>
+          <td><%= order.productname %></td>
+          <td><%= order.status%></td>
+          <td><%= order.totalamounts %></td>
+          <td><%= order.totalitem1 %></td>
+          <td><%= new Date(order.createdAt).toLocaleString() %></td>
+
+          <td>
+          <form action="/admin/status-orders/<%= order._id %>"method="post">
+            <button type="submit" name="status" value="Delivered">
+              Delivered
+            </button>
+            <button type="submit" name="status" value="shipped">
+              shipped
+            </button>
+            </form>
+          </td>
+     
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </body>
+</html>

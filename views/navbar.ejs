@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap demo</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      .hide {
+        display: none;
+        color: black;
+      }
+      nav{
+        color: #fff;
+        background-color: #343a40;
+        position: sticky !important;
+        top: 0px;
+        z-index: 5;
+      }
+      #show {
+        cursor: pointer;
+      }
+      .show1 {
+        display: block;
+      }
+      .email-container {
+        position: absolute;
+        background: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        top: 40px;
+        right: 0;
+       
+      }
+      .relative {
+        position: relative;
+      }
+      @media (max-width: 768px) {  
+    .navbar-toggler {    
+      display: none;  /* 👈 Sidebar toggle button ko mobile par hide kiya */
+    }
+  }
+     
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg ">
+      <div class="container-fluid">
+        <p class="navbar-brand"style="color:white">E-commerce</p>
+        <button id="sidebar-toggle" class="btn btn-outline-light ms-3">
+          <i class="fas fa-bars"></i>
+        </button>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div
+          class="collapse navbar-collapse d-flex"
+          id="navbarSupportedContent"
+        >
+          <ul class="navbar-nav ms-auto me-4">
+            <li class="nav-item d-flex align-items-center relative">
+              <p class="mb-0 me-2"><%= name %></p>
+              <i class="fa-solid fa-circle-user fa-lg" id="show"></i>
+              <p class="hide email-container" id="togg"><%= email %></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <script>
+      const show = document.getElementById("show");
+      const togg = document.getElementById("togg");
+      show.addEventListener("click", () => {
+        togg.classList.toggle("show1");
+      });
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

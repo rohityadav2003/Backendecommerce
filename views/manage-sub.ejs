@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+            text-align: center;
+        }
+        .table-container {
+            width: 60%;
+        
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            overflow-x: auto; /* Enables horizontal scrolling on small screens */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        thead {
+            background: #007BFF;
+            color: white;
+        }
+        tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        tbody tr:hover {
+            background: #e9ecef;
+        }
+        .edit, .delete {
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: inline-block;
+            text-align: center;
+        }
+        .edit {
+            background: #28a745;
+            color: white;
+        }
+        .delete {
+            background: #dc3545;
+            color: white;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+        }
+        .no-data {
+            text-align: center;
+            font-weight: bold;
+            color: #888;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .table-container {
+                width: 100%;
+                overflow-x: auto;
+            }
+            th, td {
+                font-size: 14px;
+                padding: 10px;
+            }
+            .action-buttons {
+                display: flex;
+                flex-direction: column; /* Stack buttons on small screens */
+                gap: 3px;
+            }
+            .edit, .delete {
+                font-size: 12px;
+                padding: 5px;
+                width: 70px; /* Fix width for buttons */
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+  
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No</th> 
+                    <th>Category</th>
+                    <th>sub-category</th>
+                    <th>Creation Date</th>
+                  
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (managesub.length > 0) { %>
+                    <% managesub.forEach((item, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= item.category %></td>
+                            <td><%= item.subcategory %></td>
+                            <td><%= new Date(item.createdAt).toISOString().replace("T", " ").split(".")[0] %></td>
+                           
+                            
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="/admin/subcategory-edit/<%= item._id %>" class="edit">Edit</a>
+                                    <a href="/admin/sub-delete/<%= item._id %>" class="delete"onclick="return confirmdelete()">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5" class="no-data">No data available</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    <script>
+      function confirmdelete(){
+        return confirm("Do you  want to delete this category?");
+      }  
+    </script>
+</body>
+</html>

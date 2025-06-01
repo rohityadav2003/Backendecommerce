@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        select, input, textarea, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            font-size: 16px;
+            margin-top: 15px;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Add Sub-Category</h2>
+        <form action="/admin/add-subcategory" method="POST">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                <option value="">Select Category</option>
+                <% manage.forEach((cat) => { %>
+                    <option value="<%= cat.category %>"><%= cat.category %></option>
+                <% }) %>
+            </select>
+
+            <label for="subcategory">Sub-Category</label>
+            <input type="text" id="subcategory" name="subcategory" placeholder="Enter sub-category" required>
+
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4" placeholder="Enter description" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Category</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    
+
+    /* Wrapper to center only the form */
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    
+    }
+
+    .form-container {
+      margin-top: 100px;
+      background:#155263;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      color: #fff;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #74ebd5;
+      outline: none;
+    }
+
+    .but {
+      width: 100%;
+      padding: 10px;
+      background: #74ebd5;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      color: black;
+    }
+
+    button:hover {
+      background: #5dc3b8;
+    }
+
+    @media (max-width: 500px) {
+      .form-container {
+        padding: 15px;
+      }
+      input, textarea, button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+ 
+
+  <div class="wrapper">
+    <div class="form-container">
+      <h2>edit Category</h2>
+      <form action="/admin/sub-edit/<%=submanage.id%>" method="POST">
+        <div class="form-group">
+          <label for="category">Category Name</label>
+          <input
+            type="text"
+            id="category"
+            name="category"
+          value="<%=submanage.category %>"
+          />
+        </div>
+        <div class="form-group">
+            <label for="category">subCategory Name</label>
+            <input
+              type="text"
+              id="category"
+              name="subcategory"
+            value="<%=submanage.subcategory %>"
+            />
+          </div>
+        
+        <div class="form-group">
+          <button type="submit"class="but">edit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
