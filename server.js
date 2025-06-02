@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}))
 
 app.use(cors({
-  origin: "https://clientecommerce1.vercel.app",
+  origin: "https://rohitecommercepro.netlify.app",
   credentials: true, // Allow cookies/sessions
 }));
 // app.use(cors());
