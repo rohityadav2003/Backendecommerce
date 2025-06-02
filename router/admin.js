@@ -466,7 +466,9 @@ router.post("/status-orders/:id", async (req, res) => {
     };
 
     if (!validTransitions[currentStatus]?.includes(newStatus)) {
-      return res.status(400).send(`Invalid status transition from "${currentStatus}" to "${newStatus}"`);
+    return res
+  .status(400)
+  .send(`Invalid status transition from ${currentStatus} to ${newStatus}`);
     }
 
     const updatedFields = { status: newStatus };
