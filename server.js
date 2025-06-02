@@ -24,15 +24,19 @@ app.use(cors({
 }));
 
 // app.use(cors());
-app.use(session({
-    secret:"my secret-key",
-    resave:false,
-    saveUninitialized:true,
+app.set("trust proxy", 1);
+app.use(
+  session({
+    secret: "my secret-key",
+    resave: false,
+    saveUninitialized: false,
     cookie: {
-        secure: false,  // true only with HTTPS
-        httpOnly: true,
-      }
-}))
+      sameSite: "none",
+      secure: true,
+      httpOnly: true,
+    },
+  })
+);
 mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.log(err));
